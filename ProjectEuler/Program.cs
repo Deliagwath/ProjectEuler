@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Numerics;
 
 namespace ProjectEuler
 {
@@ -15,14 +16,46 @@ namespace ProjectEuler
             Console.ReadLine();
         }
 
+        public static string Problem13()
+        {
+            List<string> strNum = File.ReadLines("Q13Numbers").ToList();
+            List<BigInteger> numbers = strNum.Select(str => BigInteger.Parse(str)).ToList();
+            BigInteger sum = numbers.Aggregate(BigInteger.Add);
+            return "";
+        }
+
         public static int Problem12()
         {
+            // BRUTE FORCE THEM ALLLLLLLLLLLLLL
+            int triangleIndex = 2, triangleNumber = 0, factorCount = 0;
+            bool complete = false;
+
+            while (!complete)
+            {
+                // Generate Triangle Number
+                triangleNumber = 0;
+                for (int i = 1; i < triangleIndex; i++)
+                {
+                    triangleNumber += i;
+                }
+
+                // Find number of factors
+                for (int i = 1; i < Math.Ceiling(Math.Sqrt(triangleNumber)); i++)
+                {
+                    if (triangleNumber % i == 0) { factorCount+=2; }
+                    if (factorCount >= 499) { return triangleNumber; }
+                }
+                Console.WriteLine(String.Format("{0}\t\t{1}", triangleNumber, factorCount));
+                factorCount = 0;
+                triangleIndex++;
+            }
+
             return -1;
         }
 
         public static int Problem11()
         {
-            List<string> inputMatrix = File.ReadLines("Matrix").ToList();
+            List<string> inputMatrix = File.ReadLines("Q11Matrix").ToList();
             List<List<int>> matrix = inputMatrix.Select(line => line.Split(' ').Select(i => int.Parse(i)).ToList()).ToList();
             //printMatrix(matrix);
             Queue<int> horizontalStack = new Queue<int>(4);
@@ -42,6 +75,7 @@ namespace ProjectEuler
                     if (horizontalStack.Count > 4) { horizontalStack.Dequeue(); }
                     current = multiplyList(horizontalStack);
                     if (current > max) { max = current; }
+
                     // Vertical
                     verticalStack.Enqueue(matrix[j][i]);
                     if (verticalStack.Count > 4) { verticalStack.Dequeue(); }
