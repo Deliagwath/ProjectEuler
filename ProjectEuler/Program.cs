@@ -12,127 +12,181 @@ namespace ProjectEuler
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Problem12());
+            Problem15 p = new Problem15();
+            Console.WriteLine(p.Problem(2));
             Console.ReadLine();
         }
 
-        public static string Problem13()
+        class Problem15
         {
-            List<string> strNum = File.ReadLines("Q13Numbers").ToList();
-            List<BigInteger> numbers = strNum.Select(str => BigInteger.Parse(str)).ToList();
-            BigInteger sum = numbers.Aggregate(BigInteger.Add);
-            return "";
-        }
-
-        public static int Problem12()
-        {
-            // BRUTE FORCE THEM ALLLLLLLLLLLLLL
-            int triangleIndex = 2, triangleNumber = 0, factorCount = 0;
-            bool complete = false;
-
-            while (!complete)
+            public int Problem(int graphSize)
             {
-                // Generate Triangle Number
-                triangleNumber = 0;
-                for (int i = 1; i < triangleIndex; i++)
-                {
-                    triangleNumber += i;
-                }
+                // Generate Graph
 
-                // Find number of factors
-                for (int i = 1; i < Math.Ceiling(Math.Sqrt(triangleNumber)); i++)
-                {
-                    if (triangleNumber % i == 0) { factorCount+=2; }
-                    if (factorCount >= 499) { return triangleNumber; }
-                }
-                Console.WriteLine(String.Format("{0}\t\t{1}", triangleNumber, factorCount));
-                factorCount = 0;
-                triangleIndex++;
+                // Find all paths
+
             }
 
-            return -1;
-        }
-
-        public static int Problem11()
-        {
-            List<string> inputMatrix = File.ReadLines("Q11Matrix").ToList();
-            List<List<int>> matrix = inputMatrix.Select(line => line.Split(' ').Select(i => int.Parse(i)).ToList()).ToList();
-            //printMatrix(matrix);
-            Queue<int> horizontalStack = new Queue<int>(4);
-            Queue<int> verticalStack = new Queue<int>(4);
-            Queue<int> LRdiagonalStack = new Queue<int>(4);
-            Queue<int> RLdiagonalStack = new Queue<int>(4);
-            int current = 1, max = 0;
-            
-            for (int i = 0; i < matrix.Count; i++)
+            class Node
             {
-                horizontalStack.Clear();
-                verticalStack.Clear();
-                for (int j = 0; j < matrix[i].Count; j++)
+                public Node parent;
+                public Node down;
+                public Node right;
+
+                public Node(Node parent, Node down, Node right)
                 {
-                    // Horizontal
-                    horizontalStack.Enqueue(matrix[i][j]);
-                    if (horizontalStack.Count > 4) { horizontalStack.Dequeue(); }
-                    current = multiplyList(horizontalStack);
-                    if (current > max) { max = current; }
-
-                    // Vertical
-                    verticalStack.Enqueue(matrix[j][i]);
-                    if (verticalStack.Count > 4) { verticalStack.Dequeue(); }
-                    current = multiplyList(verticalStack);
-                    if (current > max) { max = current; }
-
-                    // Diagonal
-                    // LEFT-RIGHT
-                    if (i < matrix.Count - 3 && j < matrix[i].Count - 3)
+                    this.parent = parent;
+                    this.down = down;
+                    this.right = right;
+                }
+            }
+        }
+        class Problem14
+        {
+            public int Problem()
+            {
+                uint rolling = 0;
+                int min = 0, current = 0, num = 0;
+                for (int i = 999167; i > 1; i--)
+                {
+                    rolling = (uint)i;
+                    current = 0;
+                    //Console.Write(i);
+                    while (rolling != 1)
                     {
-                        LRdiagonalStack.Enqueue(matrix[i][j]);
-                        LRdiagonalStack.Enqueue(matrix[i + 1][j + 1]);
-                        LRdiagonalStack.Enqueue(matrix[i + 2][j + 2]);
-                        LRdiagonalStack.Enqueue(matrix[i + 3][j + 3]);
-                        current = multiplyList(LRdiagonalStack);
-                        if (current > max) { max = current; }
-                        LRdiagonalStack.Clear();
+                        if (rolling % 2 == 0) { rolling /= 2; }
+                        else { rolling = (rolling * 3) + 1; }
+                        current++;
+                    }
+                    if (current > min)
+                    {
+                        min = current;
+                        num = i;
+                    }
+                    //Console.WriteLine(" " + current);
+                }
+                return num;
+            }
+        }
+        class Problem13
+        {
+            public string Problem()
+            {
+                List<string> strNum = File.ReadLines("Q13Numbers").ToList();
+                List<BigInteger> numbers = strNum.Select(str => BigInteger.Parse(str)).ToList();
+                BigInteger sum = numbers.Aggregate(BigInteger.Add);
+                return sum.ToString();
+            }
+        }
+        class Problem12
+        {
+            public int Problem()
+            {
+                // BRUTE FORCE THEM ALLLLLLLLLLLLLL
+                int triangleIndex = 2, triangleNumber = 0, factorCount = 0;
+                bool complete = false;
+
+                while (!complete)
+                {
+                    // Generate Triangle Number
+                    triangleNumber = 0;
+                    for (int i = 1; i < triangleIndex; i++)
+                    {
+                        triangleNumber += i;
                     }
 
-                    // Diagonal
-                    // RIGHT-LEFT
-                    if (i < matrix.Count - 3 && j > 3)
+                    // Find number of factors
+                    for (int i = 1; i < Math.Ceiling(Math.Sqrt(triangleNumber)); i++)
                     {
-                        RLdiagonalStack.Enqueue(matrix[i][j]);
-                        RLdiagonalStack.Enqueue(matrix[i + 1][j - 1]);
-                        RLdiagonalStack.Enqueue(matrix[i + 2][j - 2]);
-                        RLdiagonalStack.Enqueue(matrix[i + 3][j - 3]);
-                        current = multiplyList(RLdiagonalStack);
+                        if (triangleNumber % i == 0) { factorCount += 2; }
+                        if (factorCount >= 499) { return triangleNumber; }
+                    }
+                    Console.WriteLine(String.Format("{0}\t\t{1}", triangleNumber, factorCount));
+                    factorCount = 0;
+                    triangleIndex++;
+                }
+
+                return -1;
+            }
+        }
+        class Problem11
+        {
+            public int Problem()
+            {
+                List<string> inputMatrix = File.ReadLines("Q11Matrix").ToList();
+                List<List<int>> matrix = inputMatrix.Select(line => line.Split(' ').Select(i => int.Parse(i)).ToList()).ToList();
+                /*foreach (List<int> row in matrix)
+                {
+                    foreach (int element in row)
+                    {
+                        Console.Write(element.ToString() + " ");
+                    }
+                    Console.Write(Environment.NewLine);
+                }*/
+                Queue<int> horizontalStack = new Queue<int>(4);
+                Queue<int> verticalStack = new Queue<int>(4);
+                Queue<int> LRdiagonalStack = new Queue<int>(4);
+                Queue<int> RLdiagonalStack = new Queue<int>(4);
+                int current = 1, max = 0;
+
+                for (int i = 0; i < matrix.Count; i++)
+                {
+                    horizontalStack.Clear();
+                    verticalStack.Clear();
+                    for (int j = 0; j < matrix[i].Count; j++)
+                    {
+                        // Horizontal
+                        horizontalStack.Enqueue(matrix[i][j]);
+                        if (horizontalStack.Count > 4) { horizontalStack.Dequeue(); }
+                        current = multiplyList(horizontalStack);
                         if (current > max) { max = current; }
-                        RLdiagonalStack.Clear();
+
+                        // Vertical
+                        verticalStack.Enqueue(matrix[j][i]);
+                        if (verticalStack.Count > 4) { verticalStack.Dequeue(); }
+                        current = multiplyList(verticalStack);
+                        if (current > max) { max = current; }
+
+                        // Diagonal
+                        // LEFT-RIGHT
+                        if (i < matrix.Count - 3 && j < matrix[i].Count - 3)
+                        {
+                            LRdiagonalStack.Enqueue(matrix[i][j]);
+                            LRdiagonalStack.Enqueue(matrix[i + 1][j + 1]);
+                            LRdiagonalStack.Enqueue(matrix[i + 2][j + 2]);
+                            LRdiagonalStack.Enqueue(matrix[i + 3][j + 3]);
+                            current = multiplyList(LRdiagonalStack);
+                            if (current > max) { max = current; }
+                            LRdiagonalStack.Clear();
+                        }
+
+                        // Diagonal
+                        // RIGHT-LEFT
+                        if (i < matrix.Count - 3 && j > 3)
+                        {
+                            RLdiagonalStack.Enqueue(matrix[i][j]);
+                            RLdiagonalStack.Enqueue(matrix[i + 1][j - 1]);
+                            RLdiagonalStack.Enqueue(matrix[i + 2][j - 2]);
+                            RLdiagonalStack.Enqueue(matrix[i + 3][j - 3]);
+                            current = multiplyList(RLdiagonalStack);
+                            if (current > max) { max = current; }
+                            RLdiagonalStack.Clear();
+                        }
                     }
                 }
+
+                //foreach (List<int> row in matrix) { foreach (int element in row) { Console.WriteLine(element); } }
+                return max;
             }
 
-            //foreach (List<int> row in matrix) { foreach (int element in row) { Console.WriteLine(element); } }
-            return max;
-        }
-
-        public static int multiplyList(Queue<int> array)
-        {
-            int product = 1;
-            foreach (int i in array)
+            public int multiplyList(Queue<int> array)
             {
-                product *= i;
-            }
-            return product;
-        }
-
-        public static void printMatrix(List<List<int>> matrix)
-        {
-            foreach (List<int> row in matrix)
-            {
-                foreach (int element in row)
+                int product = 1;
+                foreach (int i in array)
                 {
-                    Console.Write(element.ToString() + " ");
+                    product *= i;
                 }
-                Console.Write(Environment.NewLine);
+                return product;
             }
         }
     }
