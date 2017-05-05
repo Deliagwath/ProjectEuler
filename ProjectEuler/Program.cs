@@ -12,7 +12,7 @@ namespace ProjectEuler
     {
         static void Main(string[] args)
         {
-            Problem8 p = new Problem8();
+            Problem1 p = new Problem1();
             Console.WriteLine(p.Problem());
             Console.ReadLine();
         }
@@ -206,6 +206,20 @@ namespace ProjectEuler
                     if (tmp > ans) { ans = tmp; }
                 }
                 return ans;
+            }
+        }
+        class Problem1
+        {
+            public int Problem()
+            {
+                HashSet<int> hs3 = new HashSet<int>();
+                HashSet<int> hs5 = new HashSet<int>();
+                for (int i = 3; i < 1000; i += 3) { hs3.Add(i); }
+                for (int i = 5; i < 1000; i += 5) { hs5.Add(i); }
+                hs3.UnionWith(hs5);
+                int sum = 0;
+                foreach (int i in hs3) { sum += i; }
+                return sum;
             }
         }
     }
