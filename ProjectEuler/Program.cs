@@ -12,8 +12,8 @@ namespace ProjectEuler
     {
         static void Main(string[] args)
         {
-            Problem1 p = new Problem1();
-            Console.WriteLine(p.Problem(3));
+            Problem2 p = new Problem2();
+            Console.WriteLine(p.Problem(1));
             Console.ReadLine();
         }
 
@@ -210,10 +210,27 @@ namespace ProjectEuler
         }
         class Problem2
         {
-            //public int Problem()
-            //{
-            //
-            //}
+            public int Problem(int method_number)
+            {
+                Dictionary<int, Func<int>> funcs = new Dictionary<int, Func<int>>();
+                funcs.Add(1, () => Implementation1());
+                //funcs.Add(2, () => Implementation2());
+                //funcs.Add(3, () => Implementation3());
+                return funcs[method_number].Invoke();
+            }
+
+            // Recursive Implementation
+            private int Implementation1()
+            {
+                return I1Helper(1, 1, 0);
+            }
+
+            private int I1Helper(int first, int second, int sum)
+            {
+                if (first > 4000000) { return sum; }
+                int next_sum = first % 2 == 0 ? first + sum : sum;
+                return I1Helper(second, first + second, next_sum);
+            }
         }
         class Problem1
         {
