@@ -13,7 +13,7 @@ namespace ProjectEuler
         static void Main(string[] args)
         {
             Problem2 p = new Problem2();
-            Console.WriteLine(p.Problem(1));
+            Console.WriteLine(p.Problem(2));
             Console.ReadLine();
         }
 
@@ -214,7 +214,7 @@ namespace ProjectEuler
             {
                 Dictionary<int, Func<int>> funcs = new Dictionary<int, Func<int>>();
                 funcs.Add(1, () => Implementation1());
-                //funcs.Add(2, () => Implementation2());
+                funcs.Add(2, () => Implementation2());
                 //funcs.Add(3, () => Implementation3());
                 return funcs[method_number].Invoke();
             }
@@ -230,6 +230,20 @@ namespace ProjectEuler
                 if (first > 4000000) { return sum; }
                 int next_sum = first % 2 == 0 ? first + sum : sum;
                 return I1Helper(second, first + second, next_sum);
+            }
+
+            // Iterative Implementation
+            private int Implementation2()
+            {
+                int first = 1, second = 1, sum = 0, tmp = 0;
+                while (first < 4000000)
+                {
+                    sum += first % 2 == 0 ? first : 0;
+                    tmp = first;
+                    first = second;
+                    second += tmp;
+                }
+                return sum;
             }
         }
         class Problem1
