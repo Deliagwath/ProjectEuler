@@ -13,7 +13,7 @@ namespace ProjectEuler
         static void Main(string[] args)
         {
             Problem1 p = new Problem1();
-            Console.WriteLine(p.Problem());
+            Console.WriteLine(p.Problem(3));
             Console.ReadLine();
         }
 
@@ -208,9 +208,26 @@ namespace ProjectEuler
                 return ans;
             }
         }
+        class Problem2
+        {
+            //public int Problem()
+            //{
+            //
+            //}
+        }
         class Problem1
         {
-            public int Problem()
+            public int Problem(int method_number)
+            {
+                Dictionary<int, Func<int>> funcs = new Dictionary<int, Func<int>>();
+                funcs.Add(1, () => Implementation1());
+                funcs.Add(2, () => Implementation2());
+                funcs.Add(3, () => Implementation3());
+                return funcs[method_number].Invoke();
+            }
+
+            // Set Implementation
+            private int Implementation1()
             {
                 HashSet<int> hs3 = new HashSet<int>();
                 HashSet<int> hs5 = new HashSet<int>();
@@ -220,6 +237,33 @@ namespace ProjectEuler
                 int sum = 0;
                 foreach (int i in hs3) { sum += i; }
                 return sum;
+            }
+
+            // Iterative Implementation
+            private int Implementation2()
+            {
+                int sum = 0;
+                for (int i = 1; i < 1000; i++)
+                {
+                    if (i % 5 == 0 || i % 3 == 0) { sum += i; }
+                }
+                return sum;
+            }
+
+            // Formula Implementation
+            // https://codereview.stackexchange.com/questions/2/project-euler-problem-1-in-python-multiples-of-3-and-5
+            private int Implementation3()
+            {
+                int threes = I3Helper(3, 1000);
+                int fives = I3Helper(5, 1000);
+                int fifteen = I3Helper(15, 1000);
+                return threes + fives - fifteen;
+            }
+
+            private int I3Helper(int factor, int max)
+            {
+                int part_sum = (max - 1) / factor;
+                return factor * part_sum * (part_sum + 1) / 2;
             }
         }
     }
